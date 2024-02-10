@@ -66,7 +66,7 @@ fi
 
 echo -e "\n*******"
 echo "Don't forget to reload your environment!"
-echo "  source .bashrc"
+echo "  source ~/.bashrc"
 echo "*******"
 
 echo -e "\n`date` - Finished Hyperling's Termux Setup"

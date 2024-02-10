@@ -14,8 +14,11 @@ else
 	alias prod="echo 'ERROR: .env not set up properly, please fix and reload RC.'"
 fi
 
+# Quickies
+alias reload="source ~/.bashrc"
+
 # Easily get to storage devices.
-export SS="~/storage/shared/"
+export SS="~/storage/shared"
 alias ss="cd $SS"
 alias sd="ss"
 alias storage="ss"
@@ -26,8 +29,16 @@ export DCIM="$SS/DCIM/Camera"
 alias dcim="cd $DCIM"
 
 # Shortcut to Code
-export DCIM="$SS/Code"
-alias dcim="cd $CODE"
+export CODE="$SS/Code"
+alias code="cd $CODE"
+
+# Shortcuts for TRASH.
+export TRASH="$SS/TRASH"
+alias trash="cd $TRASH"
+alias clean-trash="bash -c 'rm -rfv $TRASH/*'"
+alias trash-clean="clean-trash"
+alias check-trash="du -h $TRASH"
+alias trash-check="check-trash"
 
 # Help prevent mistakes.
 alias cp="cp -v"
@@ -99,6 +110,20 @@ function commit {
 	fi
 	git add . && git commit -m "$message" && git push
 }
+
+# WORK IN PROGRESS
+# Easily test this project.
+function test-termux {
+	# TBD I have no idea why this does not work with the $CODE variable.
+	cd ~
+	ls storage/shared/Code/termux-dev/
+	ls $CODE
+	copy="~/termux-copy"
+	[[ -e $copy && $copy != "/" ]] && rm -rfv "$copy"
+	cp -r "$CODE"/termux* "$copy"
+	chmod 755 "$copy"/*.sh
+	"$copy"/setup.sh
+} # WORK IN PROGRESS
 
 cd ~/storage/shared/
 
