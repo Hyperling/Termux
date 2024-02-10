@@ -36,11 +36,11 @@ alias rm="echo 'Move to ~/storage/shared/TRASH/ instead!'"
 
 ## Functions ##
 
+# Optimize the bitrate and audio levels for an edited video.
 function process-video-usage {
    echo "USAGE: process-video oldFile newFile [videoBitrate] [audioBitrate]"
 	echo "Call ffmpeg with preferred video posting settings." 
 }
-
 function process-video {
    # Parameters
    file="$1"
@@ -87,6 +87,17 @@ function process-video {
 
 	echo -e "\n`date` - Finished with status '$status'."
 	return $status
+}
+
+# Quickly commit code to a repo.
+function commit {
+	message="$1"
+	if [[ -z $message ]]; then
+		echo "ERROR: A message is required." >&2
+		echo 'USAGE: commit "My commit message."' >&2
+		return 1
+	fi
+	git add . && git commit -m "$message" && git push
 }
 
 cd ~/storage/shared/
