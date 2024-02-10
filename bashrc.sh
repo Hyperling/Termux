@@ -14,14 +14,22 @@ else
 	alias prod="echo 'ERROR: .env not set up properly, please fix and reload RC.'"
 fi
 
-# Easily get to storage device.
+# Easily get to storage devices.
 export SS="~/storage/shared/"
 alias ss="cd $SS"
 alias sd="ss"
 alias storage="ss"
 alias home="ss"
 
-# Help Prevent Mistakes
+# Shortcut to media.
+export DCIM="$SS/DCIM/Camera"
+alias dcim="cd $DCIM"
+
+# Shortcut to Code
+export DCIM="$SS/Code"
+alias dcim="cd $CODE"
+
+# Help prevent mistakes.
 alias cp="cp -v"
 alias mv="mv -v"
 alias rm="echo 'Move to ~/storage/shared/TRASH/ instead!'"
@@ -72,7 +80,7 @@ function process-video {
    
    # Main
    ffmpeg -nostdin -hide_banner -loglevel quiet \
-		$video $audio -movflags +faststart \
+		-vcodec libx264 $video $audio -movflags +faststart \
 		-af "dynaudnorm=f=33:g=65:p=0.66:m=33." \
 		-i "$file" "$newfile"
 	status="$?"
