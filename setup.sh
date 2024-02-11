@@ -29,7 +29,7 @@ fi
 
 echo -e "\n`date` - Install Software"
 pkg install \
-   openssh tsu vim htop git cronie \
+   openssh tsu vim htop git cronie man \
    nmap traceroute \
    ffmpeg
 

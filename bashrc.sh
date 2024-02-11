@@ -133,7 +133,7 @@ function test-termux {
 	#"$copy"/setup.sh
 
 	# Whatever, waste some network bandwidth.
-	git clone https://github.com/Hyperling/Termux ~/termux-deleteme
+	git clone https://github.com/Hyperling/Termux ~/termux-deleteme --branch=dev
 	chmod 755 ~/termux-deleteme/*.sh
 	~/termux-deleteme/setup.sh
 } # WORK IN PROGRESS
