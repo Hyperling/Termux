@@ -125,6 +125,7 @@ function commit {
 # Easily test this project after committing changes.
 # Otherwise can just source this file unless testing setup.sh.
 function test-termux {
+	sh -c "rm -rf ~/termux-deleteme ~/TRASH/termux-deleteme" 2>/dev/null
 	git clone https://github.com/Hyperling/Termux ~/termux-deleteme --branch=dev
 	chmod 755 ~/termux-deleteme/*.sh
 	~/termux-deleteme/setup.sh
