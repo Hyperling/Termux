@@ -1,14 +1,14 @@
 # No Shebang For Termux
 # 2024-02-10 Hyperling
 
-echo "`date` - Starting Hyperling's Termux Setup"
+PROG="$(basename -- "${BASH_SOURCE[0]}")"
+
+echo "`date` - Starting $PROG"
 
 DIR="$(dirname -- "${BASH_SOURCE[0]}")"
 cd $DIR
 DIR="`pwd`"
 echo "Working in '$DIR'."
-
-PROG="$(basename -- "${BASH_SOURCE[0]}")"
 
 echo -e "\n`date` - Upgrade Package Repos"
 pkg update &&
@@ -76,5 +76,5 @@ echo "Don't forget to reload your environment!"
 echo "  source ~/.bashrc"
 echo "*******"
 
-echo -e "\n`date` - Finished Hyperling's Termux Setup"
+echo -e "\n`date` - Finished $PROG"
 exit 0

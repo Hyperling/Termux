@@ -1,5 +1,7 @@
 # 2024-02-10 Hyperling
 
+PROG="$(basename -- "${BASH_SOURCE[0]}")"
+
 if [[ -e ~/.env ]]; then
 	source ~/.env
 fi
@@ -141,4 +143,4 @@ function test-termux {
 # Go to normal storage. DISABLED, use shortcut aliases instead.
 #cd ~/storage/shared/
 
-echo "'$0' completed!"
+echo "'$PROG' completed!"
