@@ -3,11 +3,12 @@
 
 echo "`date` - Starting Hyperling's Termux Setup"
 
-DIR="`dirname $0`"
+DIR="$(dirname -- "${BASH_SOURCE[0]}")"
 cd $DIR
 DIR="`pwd`"
+echo "Working in '$DIR'."
 
-PROG="`basename $0`"
+PROG="$(basename -- "${BASH_SOURCE[0]}")"
 
 echo -e "\n`date` - Upgrade Package Repos"
 pkg update &&
@@ -60,9 +61,9 @@ if [[ ! -e ~/storage/shared/TRASH ]]; then
 fi
 ln -s ~/storage/shared/TRASH ~/TRASH
 
-cd ..
 if [[ -n $DIR && $DIR != "/" && -d .git ]]; then
 	echo "We are in a git clone, remove the project."
+	cd ..
 	mv -v $DIR ~/TRASH/termux-"`date +'%Y%m%d%H%M%S'`" | 
 		grep -v '/.git/'
 else
