@@ -49,8 +49,15 @@ alias rm="echo 'Move to ~/storage/shared/TRASH/ instead!'"
 
 # Optimize the bitrate and audio levels for an edited video.
 function process-video-usage {
-   echo "USAGE: process-video oldFile newFile [videoBitrate] [audioBitrate]"
-	echo "Call ffmpeg with preferred video posting settings." 
+   echo "USAGE: process-video oldFile newFile [videoBitrate] [audioBitrate] [sizeRating]"
+	echo -n "Call ffmpeg with preferred video posting settings. " 
+	echo -n "Bitrates default to 2000k amd 192k, size is 720. "
+	echo "These work well on Odysee and are fairly small as backups."
+	echo "Examples:"
+	echo " Create a smal file for quick streaming." 
+	echo "  process-video youcut.mp4 20240210.mp4 1200k 128k 480"
+	echo " Create a larger file for something like YouTube."
+	echo "  process-video youcut.mp4 20240210_1080p.mp4 5000k 256k 1080"
 }
 function process-video {
    # Parameters
@@ -58,6 +65,7 @@ function process-video {
    newfile="$2"
    video="$3"
    audio="$4"
+	size="$5"
    
    # Validations
    if [[ -z $file || ! -e $file ]]; then
@@ -77,21 +85,24 @@ function process-video {
 
    if [[ -z $video ]]; then
       video="-b:v 2000k"
-   else
-      video="-b:v $video"
    fi
+   video="-b:v $video"
 
    if [[ -z $audio ]]; then
       audio="-b:a 192k"
-   else
-      audio="-b:a $audio"
    fi
+   audio="-b:a $audio"
+
+	if [[ -z $size ]]; then
+		size="720"
+	fi
+	size="-filter scale=-1:$size"
 
 	echo "`date` - Converting '$file' to '$newfile' using '$video $audio'"
    
    # Main
    ffmpeg -nostdin -hide_banner -loglevel quiet \
-		-vcodec libx264 $video $audio -movflags +faststart \
+		-vcodec libx264 movflags +faststart $size $video $audio \
 		-af "dynaudnorm=f=33:g=65:p=0.66:m=33." \
 		-i "$file" "$newfile"
 	status="$?"
