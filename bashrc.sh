@@ -138,6 +138,7 @@ function test-termux {
 	~/termux-deleteme/setup.sh
 } # WORK IN PROGRESS
 
-cd ~/storage/shared/
+# Go to normal storage. DISABLED, use shortcut aliases instead.
+#cd ~/storage/shared/
 
 echo "'$0' completed!"
