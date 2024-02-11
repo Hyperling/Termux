@@ -126,14 +126,16 @@ function commit {
 # Easily test this project.
 function test-termux {
 	# TBD I have no idea why this does not work with the $CODE variable.
-	cd ~
-	ls storage/shared/Code/termux-dev/
-	ls $CODE
-	copy="~/termux-copy"
-	[[ -e $copy && $copy != "/" ]] && rm -rfv "$copy"
-	cp -r "$CODE"/termux* "$copy"
-	chmod 755 "$copy"/*.sh
-	"$copy"/setup.sh
+	#copy="~/termux-copy"
+	#[[ -e $copy && $copy != "/" ]] && rm -rfv "$copy"
+	#cp -r "$CODE"/termux* "$copy"
+	#chmod 755 "$copy"/*.sh
+	#"$copy"/setup.sh
+
+	# Whatever, waste some network bandwidth.
+	git clone https://github.com/Hyperling/Termux ~/termux-deleteme
+	chmod 755 ~/termux-deleteme/*.sh
+	~/termux-deleteme/setup.sh
 } # WORK IN PROGRESS
 
 cd ~/storage/shared/
