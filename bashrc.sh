@@ -130,6 +130,9 @@ function test-termux {
 	chmod 755 ~/termux-deleteme/*.sh
 	~/termux-deleteme/setup.sh
 }
+alias reload-termux="test-termux"
+alias termux-test="test-termux"
+alias termux-reload="reload-termux"
 
 # Go to normal storage. DISABLED, use shortcut aliases instead.
 #cd ~/storage/shared/
