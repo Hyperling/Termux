@@ -2,7 +2,6 @@
 # 2024-02-10 Hyperling
 
 PROG="$(basename -- "${BASH_SOURCE[0]}")"
-
 echo "`date` - Starting $PROG"
 
 DIR="$(dirname -- "${BASH_SOURCE[0]}")"
@@ -76,5 +75,6 @@ echo "Don't forget to reload your environment!"
 echo "  source ~/.bashrc"
 echo "*******"
 
+PROG="$(basename -- "${BASH_SOURCE[0]}")"
 echo -e "\n`date` - Finished $PROG"
 exit 0
