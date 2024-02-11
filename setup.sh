@@ -11,7 +11,7 @@ PROG="`basename $0`"
 
 echo -e "\n`date` - Upgrade Package Repos"
 pkg update &&
-   pkg upgrade
+   pkg upgrade -y
 
 echo -e "\n`date` - Check Storage Permission"
 if [[ ! -e ~/storage/shared ]]; then
@@ -28,7 +28,7 @@ else
 fi
 
 echo -e "\n`date` - Install Software"
-pkg install \
+pkg install -y \
    openssh tsu vim htop git cronie man \
    nmap traceroute \
    ffmpeg
