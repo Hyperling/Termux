@@ -122,21 +122,13 @@ function commit {
 	git add . && git commit -m "$message" && git push
 }
 
-# WORK IN PROGRESS
-# Easily test this project.
+# Easily test this project after committing changes.
+# Otherwise can just source this file unless testing setup.sh.
 function test-termux {
-	# TBD I have no idea why this does not work with the $CODE variable.
-	#copy="~/termux-copy"
-	#[[ -e $copy && $copy != "/" ]] && rm -rfv "$copy"
-	#cp -r "$CODE"/termux* "$copy"
-	#chmod 755 "$copy"/*.sh
-	#"$copy"/setup.sh
-
-	# Whatever, waste some network bandwidth.
 	git clone https://github.com/Hyperling/Termux ~/termux-deleteme --branch=dev
 	chmod 755 ~/termux-deleteme/*.sh
 	~/termux-deleteme/setup.sh
-} # WORK IN PROGRESS
+}
 
 # Go to normal storage. DISABLED, use shortcut aliases instead.
 #cd ~/storage/shared/
