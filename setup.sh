@@ -7,6 +7,8 @@ DIR="`dirname $0`"
 cd $DIR
 DIR="`pwd`"
 
+PROG="`basename $0`"
+
 echo -e "\n`date` - Upgrade Package Repos"
 pkg update &&
    pkg upgrade
@@ -59,9 +61,13 @@ fi
 ln -s ~/storage/shared/TRASH ~/TRASH
 
 cd ..
-if [[ -n $DIR && $DIR != "/" ]]; then
+if [[ -n $DIR && $DIR != "/" && -d .git ]]; then
+	echo "We are in a git clone, remove the project."
 	mv -v $DIR ~/TRASH/termux-"`date +'%Y%m%d%H%M%S'`" | 
 		grep -v '/.git/'
+else
+	echo "File was used individually, remove it."
+	mv "$PROG" ~TRASH/
 fi
 
 echo -e "\n*******"
