@@ -84,12 +84,12 @@ function process-video {
    fi
 
    if [[ -z $video ]]; then
-      video="-b:v 2000k"
+      video="2000k"
    fi
    video="-b:v $video"
 
    if [[ -z $audio ]]; then
-      audio="-b:a 192k"
+      audio="192k"
    fi
    audio="-b:a $audio"
 
