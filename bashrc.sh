@@ -96,7 +96,7 @@ function process-video {
 	if [[ -z $size ]]; then
 		size="720"
 	fi
-	size="-filter:v 'scale=-1:$size'"
+	size="-filter:v scale=-1:$size"
 
 	echo "`date` - Converting '$file' to '$newfile' using '$video $audio'"
    
