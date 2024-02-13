@@ -67,7 +67,7 @@ if [[ -n $DIR && $DIR != "/" && -d .git ]]; then
 		grep -v '/.git/'
 else
 	echo "File was used individually, remove it."
-	mv "$PROG" ~TRASH/
+	mv "$PROG" ~/TRASH/
 fi
 
 echo -e "\n*******"
