@@ -50,14 +50,14 @@ alias rm="echo 'Move to ~/storage/shared/TRASH/ instead!'"
 # Optimize the bitrate and audio levels for an edited video.
 function process-video-usage {
    echo "USAGE: process-video oldFile newFile [videoBitrate] [audioBitrate] [sizeRating]"
-	echo -n "Call ffmpeg with preferred video posting settings. " 
-	echo -n "Bitrates default to 2000k amd 192k, size is 720. "
+	echo -n "Purpose: Call ffmpeg with preferred video posting settings. " 
+	echo -n "Bitrates default to 2000k and 192k, size is 720. "
 	echo "These work well on Odysee and are fairly small as backups."
 	echo "Examples:"
-	echo " Create a smal file for quick streaming." 
-	echo "  process-video youcut.mp4 20240210.mp4 1200k 128k 480"
-	echo " Create a larger file for something like YouTube."
-	echo "  process-video youcut.mp4 20240210_1080p.mp4 5000k 256k 1080"
+	echo "- Create a small file for quick streaming." 
+	echo "    process-video youcut.mp4 20240210.mp4 1200k 128k 480"
+	echo "- Create a larger file for something like YouTube."
+	echo "    process-video youcut.mp4 20240210_1080p.mp4 5000k 256k 1080"
 }
 function process-video {
    # Parameters
@@ -98,7 +98,7 @@ function process-video {
 	fi
 	size="-filter:v scale=-1:$size"
 
-	echo "`date` - Converting '$file' to '$newfile' using '$video $audio'"
+	echo "`date` - Converting '$file' to '$newfile'."
    
    # Main
    set -x
