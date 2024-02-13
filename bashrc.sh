@@ -101,13 +101,13 @@ function process-video {
 	echo "`date` - Converting '$file' to '$newfile' using '$video $audio'"
    
    # Main
-	 set -x
+   set -x
    ffmpeg -nostdin -hide_banner -loglevel quiet \
-		-vcodec libx264 movflags +faststart $size $video $audio \
-		-af "dynaudnorm=f=33:g=65:p=0.66:m=33." \
-		-i "$file" "$newfile"
+      -i "$file" -af "dynaudnorm=f=33:g=65:p=0.66:m=33." \
+	  -vcodec libx264 -movflags +faststart $size $video $audio \
+      "$newfile"
 	status="$?"
- set +x
+    set +x
 
  if [[ -e $newfile ]]; then
    du -h "$file"
