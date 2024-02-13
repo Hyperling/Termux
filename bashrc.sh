@@ -96,14 +96,14 @@ function process-video {
 	if [[ -z $size ]]; then
 		size="720"
 	fi
-	size="-filter scale=-1:$size"
+	size="-filter:v 'scale=-1:$size'"
 
 	echo "`date` - Converting '$file' to '$newfile' using '$video $audio'"
    
    # Main
    set -x
    ffmpeg -nostdin -hide_banner -loglevel quiet \
-      -i "$file" -af "dynaudnorm=f=33:g=65:p=0.66:m=33." \
+      -i "$file" -filter:a "dynaudnorm=f=33:g=65:p=0.66:m=33.3" \
 	  -vcodec libx264 -movflags +faststart $size $video $audio \
       "$newfile"
 	status="$?"
