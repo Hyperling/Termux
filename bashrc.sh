@@ -101,11 +101,20 @@ function process-video {
 	echo "`date` - Converting '$file' to '$newfile' using '$video $audio'"
    
    # Main
+	 set -x
    ffmpeg -nostdin -hide_banner -loglevel quiet \
 		-vcodec libx264 movflags +faststart $size $video $audio \
 		-af "dynaudnorm=f=33:g=65:p=0.66:m=33." \
 		-i "$file" "$newfile"
 	status="$?"
+ set +x
+
+ if [[ -e $newfile ]]; then
+   du -h "$file"
+	 du -h "$newfile"
+	else
+    echo "ERROR: New file not created." >&2
+ fi
 
 	echo -e "\n`date` - Finished with status '$status'."
 	return $status
