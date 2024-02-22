@@ -47,7 +47,9 @@ alias rm="echo 'Move to ~/storage/shared/TRASH/ instead!'"
 
 # Quickies
 alias update="pkg update && pkg upgrade"
-alias goodbye="update -y && exit"
+alias bye="exit"
+alias goodbye="update -y && bye"
+alias install="pkg install"
 
 ## Functions ##
 
