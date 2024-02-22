@@ -31,7 +31,7 @@ Hyperling's scripts for a productive Termux environment.
     ./setup.sh
     ```
 
-1. All done!
+1. All done! Be sure to source your new .bashrc!
 
 # Updates
 
