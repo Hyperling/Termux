@@ -45,6 +45,10 @@ alias cp="cp -v"
 alias mv="mv -v"
 alias rm="echo 'Move to ~/storage/shared/TRASH/ instead!'"
 
+# Quickies
+alias update="pkg update && pkg upgrade"
+alias goodbye="update -y && exit"
+
 ## Functions ##
 
 # Optimize the bitrate and audio levels for an edited video.
@@ -119,6 +123,7 @@ function process-video {
 	echo -e "\n`date` - Finished with status '$status'."
 	return $status
 }
+alias pv="process-video"
 
 # Quickly commit code to a repo.
 function commit {
