@@ -15,7 +15,9 @@ else
 fi
 
 # Quickies
-alias reload="source ~/.bashrc"
+alias reload-bash="source ~/.bashrc"
+alias bash-reload="reload-bash"
+alias reload="reload-bash"
 
 # Easily get to storage devices.
 export SS="~/storage/shared"
@@ -55,7 +57,7 @@ alias install="pkg install"
 
 # Optimize the bitrate and audio levels for an edited video.
 function process-video-usage {
-   echo "USAGE: process-video oldFile newFile [videoBitrate] [audioBitrate] [sizeRating]"
+	echo "USAGE: process-video oldFile newFile [videoBitrate] [audioBitrate] [sizeRating]"
 	echo -n "Purpose: Call ffmpeg with preferred video posting settings. " 
 	echo -n "Bitrates default to 2000k and 192k, size is 720. "
 	echo "These work well on Odysee and are fairly small as backups."
@@ -66,38 +68,38 @@ function process-video-usage {
 	echo "    process-video youcut.mp4 20240210_1080p.mp4 5000k 256k 1080"
 }
 function process-video {
-   # Parameters
-   file="$1"
-   newfile="$2"
-   video="$3"
-   audio="$4"
+	# Parameters
+	file="$1"
+	newfile="$2"
+	video="$3"
+	audio="$4"
 	size="$5"
-   
-   # Validations
-   if [[ -z $file || ! -e $file ]]; then
-      echo "ERROR: Original file '$file' does not exist." >&2
-      process-video-usage
-		return 1
-   fi
-   
-   if [[ -z $newfile || -e $newfile ]]; then
-      echo "ERROR: New file '$newfile' already exists." >&2
-      process-video-usage
-   elif [[ -e $newfile ]]; then
-      echo "ERROR: New file '$newfile' already exists." >&2
+
+	# Validations
+	if [[ -z $file || ! -e $file ]]; then
+		echo "ERROR: Original file '$file' does not exist." >&2
 		process-video-usage
 		return 1
-   fi
+	fi
 
-   if [[ -z $video ]]; then
-      video="2000k"
-   fi
-   video="-b:v $video"
+	if [[ -z $newfile || -e $newfile ]]; then
+		echo "ERROR: New file '$newfile' already exists." >&2
+		process-video-usage
+	elif [[ -e $newfile ]]; then
+		echo "ERROR: New file '$newfile' already exists." >&2
+		process-video-usage
+		return 1
+	fi
 
-   if [[ -z $audio ]]; then
-      audio="192k"
-   fi
-   audio="-b:a $audio"
+	if [[ -z $video ]]; then
+		video="2000k"
+	fi
+	video="-b:v $video"
+
+	if [[ -z $audio ]]; then
+		audio="192k"
+	fi
+	audio="-b:a $audio"
 
 	if [[ -z $size ]]; then
 		size="720"
@@ -105,21 +107,21 @@ function process-video {
 	size="-filter:v scale=-1:$size"
 
 	echo "`date` - Converting '$file' to '$newfile'."
-   
-   # Main
-   set -x
-   ffmpeg -nostdin -hide_banner -loglevel quiet \
-      -i "$file" -filter:a "dynaudnorm=f=33:g=65:p=0.66:m=33.3" \
-	  -vcodec libx264 -movflags +faststart $size $video $audio \
-      "$newfile"
+
+	# Main
+	set -x
+	ffmpeg -nostdin -hide_banner -loglevel quiet \
+		-i "$file" -filter:a "dynaudnorm=f=33:g=65:p=0.66:m=33.3" \
+		-vcodec libx264 -movflags +faststart $size $video $audio \
+		"$newfile"
 	status="$?"
-    set +x
+	set +x
 
  if [[ -e $newfile ]]; then
-   du -h "$file"
-	 du -h "$newfile"
+	du -h "$file"
+	du -h "$newfile"
 	else
-    echo "ERROR: New file not created." >&2
+	echo "ERROR: New file not created." >&2
  fi
 
 	echo -e "\n`date` - Finished with status '$status'."

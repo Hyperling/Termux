@@ -37,7 +37,7 @@ Hyperling's scripts for a productive Termux environment.
 
 Each program is developed to be run numerous times, so all that needs done is following the Install instructions again.
 
-A shortcut for this exists after the initial install, `termux-reload`.
+Shortcuts for this exist after the initial install, such as running `termux-reload` then `bash-reload`.
 
 # Development
 

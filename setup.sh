@@ -11,33 +11,33 @@ echo "Working in '$DIR'."
 
 echo -e "\n`date` - Upgrade Package Repos"
 pkg update &&
-   pkg upgrade -y
+	pkg upgrade -y
 
 echo -e "\n`date` - Check Storage Permission"
 if [[ ! -e ~/storage/shared ]]; then
-   sleep 3
-   termux-setup-storage
-   if [[ -e ~/storage/shared/ ]]; then
-      echo "~/storage/shared/ now exists. :)"
+	sleep 3
+	termux-setup-storage
+	if [[ -e ~/storage/shared/ ]]; then
+		echo "~/storage/shared/ now exists. :)"
 	else
-      echo "ERROR: Something ain't right, Jim! Abort!" >&2
+		echo "ERROR: Something ain't right, Jim! Abort!" >&2
 		exit 1
 	fi
 else
-   echo "Everything looks good already, pal."
+	echo "Everything looks good already, pal."
 fi
 
 echo -e "\n`date` - Install Software"
 pkg install -y \
-   openssh tsu vim htop git cronie man \
-   nmap traceroute \
-   ffmpeg imagemagick \
-   kotlin php nodejs python libllvm
+	openssh tsu vim htop git cronie man \
+	nmap traceroute \
+	ffmpeg imagemagick \
+	kotlin php nodejs python libllvm
 
 echo -e "\n`date` - BASH Environment"
 if [[ ! -e ~/.env ]]; then
 	if [[ -e env.example ]]; then
-	   mv -v env.example ~/.env
+		mv -v env.example ~/.env
 	else
  	  echo "ERROR: Neither .env or env.example found." >&2
 	fi
@@ -49,7 +49,7 @@ fi
 if [[ -e bashrc.sh ]]; then
 	mv -v bashrc.sh ~/.bashrc
 else
-   echo "ERROR: bashrc.sh not found, skipping." >&2
+	echo "ERROR: bashrc.sh not found, skipping." >&2
 fi
 
 echo -e "\n`date` - Cleanup"
