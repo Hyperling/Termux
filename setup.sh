@@ -31,7 +31,8 @@ echo -e "\n`date` - Install Software"
 pkg install -y \
    openssh tsu vim htop git cronie man \
    nmap traceroute \
-   ffmpeg
+   ffmpeg imagemagick \
+   kotlin php nodejs python libllvm
 
 echo -e "\n`date` - BASH Environment"
 if [[ ! -e ~/.env ]]; then
