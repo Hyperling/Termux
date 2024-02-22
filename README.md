@@ -50,4 +50,4 @@ chmod 755 *.sh
 ./setup.sh
 ```
 
-Or use the `test-termux` command if the project is already loaded..
+Or use the `test-termux` command if the project is already loaded.
