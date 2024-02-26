@@ -30,7 +30,7 @@ fi
 echo -e "\n`date` - Install Software"
 pkg install -y \
 	openssh tsu vim htop git cronie man \
-	nmap traceroute \
+	nmap traceroute wget \
 	ffmpeg imagemagick \
 	kotlin php nodejs python libllvm
 
