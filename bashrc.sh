@@ -58,7 +58,7 @@ alias install="pkg install"
 # Optimize the bitrate and audio levels for an edited video.
 function process-video-usage {
 	echo "USAGE: process-video oldFile newFile [videoBitrate] [audioBitrate] [sizeRating]"
-	echo -n "Purpose: Call ffmpeg with preferred video posting settings. " 
+	echo -n "Purpose: Call ffmpeg with preferred video posting settings. "
 	echo -n "Bitrates default to 2000k and 192k, size is 720. "
 	echo "These work well on Odysee and are fairly small as backups."
 	echo "Examples:"
@@ -90,6 +90,8 @@ function process-video {
 		process-video-usage
 		return 1
 	fi
+	
+	echo "`date` - Converting '$file' to '$newfile'."
 
 	if [[ -z $video ]]; then
 		video="2000k"
@@ -106,24 +108,29 @@ function process-video {
 	fi
 	size="-filter:v scale=-1:$size"
 
-	echo "`date` - Converting '$file' to '$newfile'."
-
-	# Main
+	## Main ##
+	# More information on two-pass processing with ffmpeg
+	# https://cinelerra-gg.org/download/CinelerraGG_Manual/Two_pass_Encoding_with_FFmp.html
 	set -x
 	ffmpeg -nostdin -hide_banner -loglevel quiet \
 		-i "$file" $size $video $audio \
 		-filter:a "dynaudnorm=f=33:g=65:p=0.66:m=33.3" \
 		-vcodec libx264 -movflags +faststart \
-		"$newfile"
+		-pass 1 -f mp4 /dev/null -y && \
+	ffmpeg -nostdin -hide_banner -loglevel quiet \
+		-i "$file" $size $video $audio \
+		-filter:a "dynaudnorm=f=33:g=65:p=0.66:m=33.3" \
+		-vcodec libx264 -movflags +faststart \
+		-pass 2 "$newfile"
 	status="$?"
 	set +x
 
- if [[ -e $newfile ]]; then
-	du -h "$file"
-	du -h "$newfile"
+	if [[ -e $newfile ]]; then
+		du -h "$file"
+		du -h "$newfile"
 	else
-	echo "ERROR: New file not created." >&2
- fi
+		echo "ERROR: New file not created." >&2
+	fi
 
 	echo -e "\n`date` - Finished with status '$status'."
 	return $status
