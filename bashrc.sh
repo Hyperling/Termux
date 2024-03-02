@@ -74,6 +74,7 @@ function process-video {
 	video="$3"
 	audio="$4"
 	size="$5"
+	passes="$6"
 
 	# Validations
 	if [[ -z $file || ! -e $file ]]; then
@@ -107,29 +108,43 @@ function process-video {
 		size="720"
 	fi
 	size="-filter:v scale=-1:$size"
+	
+	if [[ $passes != 1 ]]; then
+		passes=2
+		pass="-pass 2"
+	fi
 
 	## Main ##
 	# More information on two-pass processing with ffmpeg
 	# https://cinelerra-gg.org/download/CinelerraGG_Manual/Two_pass_Encoding_with_FFmp.html
-	set -x
-	ffmpeg -nostdin -hide_banner -loglevel quiet \
-		-i "$file" $size $video $audio \
-		-filter:a "dynaudnorm=f=33:g=65:p=0.66:m=33.3" \
-		-vcodec libx264 -movflags +faststart \
-		-pass 1 -f mp4 /dev/null -y &&
-	set +x &&
-	echo "`date` - Done with the first pass." &&
+	if [[ $passes == 2 ]]; then
+		set -x
+		ffmpeg -nostdin -hide_banner -loglevel quiet \
+			-i "$file" $size $video $audio \
+			-filter:a "dynaudnorm=f=33:g=65:p=0.66:m=33.3" \
+			-vcodec libx264 -movflags +faststart \
+			-pass 1 -f mp4 /dev/null -y &&
+		set +x &&
+		echo "`date` - Done with the first pass." ||
+		return 1
+	fi
+	
 	set -x &&
 	ffmpeg -nostdin -hide_banner -loglevel quiet \
 		-i "$file" $size $video $audio \
 		-filter:a "dynaudnorm=f=33:g=65:p=0.66:m=33.3" \
 		-vcodec libx264 -movflags +faststart \
-		-pass 2 "$newfile"
+		$pass "$newfile"
 	status="$?"
 	set +x
-	echo "`date` - Done with the second pass."
+	echo "`date` - Done with the final pass."
+	
+	if [[ $passes == 2 ]]; then
+		mv -v ffmpeg*.log* ~/TRASH/
+	fi
 
 	if [[ -e $newfile ]]; then
+		sync
 		du -h "$file"
 		du -h "$newfile"
 	else
