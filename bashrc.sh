@@ -116,7 +116,10 @@ function process-video {
 		-i "$file" $size $video $audio \
 		-filter:a "dynaudnorm=f=33:g=65:p=0.66:m=33.3" \
 		-vcodec libx264 -movflags +faststart \
-		-pass 1 -f mp4 /dev/null -y && \
+		-pass 1 -f mp4 /dev/null -y &&
+	set +x &&
+	echo "`date` - Done with the first pass." &&
+	set -x &&
 	ffmpeg -nostdin -hide_banner -loglevel quiet \
 		-i "$file" $size $video $audio \
 		-filter:a "dynaudnorm=f=33:g=65:p=0.66:m=33.3" \
@@ -124,6 +127,7 @@ function process-video {
 		-pass 2 "$newfile"
 	status="$?"
 	set +x
+	echo "`date` - Done with the second pass."
 
 	if [[ -e $newfile ]]; then
 		du -h "$file"
