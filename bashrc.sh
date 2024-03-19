@@ -145,14 +145,14 @@ function process-video {
 		mv -v ffmpeg2pass*.log* ~/TRASH/
 	fi
 
-	if [[ -e $newfile ]]; then
-		sync
+	sync
+	if [[ -s $newfile ]]; then
 		echo "`date` - Getting file sizes."
 		sleep 3
 		du -h "$file"
 		du -h "$newfile"
 	else
-		echo "ERROR: New file not created." >&2
+		echo "ERROR: New file not created or has a 0 size." >&2
 	fi
 
 	echo -e "\n`date` - Finished with status '$status'."
@@ -199,6 +199,7 @@ function basic-process {
 	# Parameters
 	input="$1"
 	output="$2"
+	typeset -u normalize
 	normalize="$3"
 	extra="$4"
 
@@ -222,20 +223,18 @@ function basic-process {
 		return 1
 	fi
 
-	typeset -u normalize
 	if [[ $normalize == "Y" ]]; then
 		echo "Normalize set to TRUE."
-		normalize='-filter:a "dynaudnorm=f=33:g=65:p=0.66:m=33.3"'
+		normal="-filter:a dynaudnorm=f=33:g=65:p=0.66:m=33.3"
 	else
 		echo "No audio normalization is being done."
-		normalize=""
 	fi
 
 	# Main
 	echo "`date` - Converting '$input' to '$output'."
 	set -x
 	ffmpeg -nostdin -hide_banner -loglevel quiet \
-		-i "$input" $extra $normalize "$output"
+		-i "$input" $extra $normal "$output"
 	status=$?
 	set +x
 
@@ -244,12 +243,14 @@ function basic-process {
 	fi
 
 	# Finish
-	if [[ ! -n $output ]]; then
+	if [[ ! -s $output ]]; then
 		echo "`date` - ERROR: Output '$output' not created or has 0 size." >&2
 		return 1
 	fi
 
+	sync
 	echo "`date` - '$output' has been created successfully."
+	sleep 3
 	du -h "$input"
 	du -h "$output"
 
