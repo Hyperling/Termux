@@ -97,7 +97,7 @@ function process-video {
 	if [[ -z $video ]]; then
 		video="2000k"
 	fi
-	video="-b:v $video"
+	video="-maxrate $video"
 
 	if [[ -z $audio ]]; then
 		audio="192k"
