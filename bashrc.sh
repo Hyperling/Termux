@@ -83,11 +83,13 @@ function process-video {
 		return 1
 	fi
 
-	if [[ -z $newfile || -e $newfile ]]; then
-		echo "ERROR: New file '$newfile' already exists." >&2
+	if [[ -z $newfile ]]; then
+		echo "ERROR: New file's name must be provided." >&2
 		process-video-usage
+		return 1
 	elif [[ -e $newfile ]]; then
 		echo "ERROR: New file '$newfile' already exists." >&2
+		du -h "$newfile"
 		process-video-usage
 		return 1
 	fi
@@ -180,6 +182,85 @@ function test-termux {
 alias reload-termux="test-termux"
 alias termux-test="test-termux"
 alias termux-reload="reload-termux"
+
+# Allow converting video to audio ad other smaller
+# tasks than what process-video is intended to do.
+function basic-process-usage {
+	echo "basic-process INPUT OUTPUT NORMALIZE [EXTRA]"
+	echo -n "Pass a file through ffmpeg with the option"
+	echo "to easily normalize the audio with a Y."
+	echo "Examples:"
+	echo "- Normalize audio on a video."
+	echo "    basic-process video.mp4 normalized.mp4 Y"
+	echo "- Convert a video to audio at 192k."
+	echo "    basic-process video.mp4 audio.mp3 N '-b:a 192k'"
+}
+function basic-process {
+	# Parameters
+	input="$1"
+	output="$2"
+	normalize="$3"
+	extra="$4"
+
+	echo "`date` - Starting basic-process"
+
+	# Validations
+	if [[ -z $input || ! -e $input ]]; then
+		echo "ERROR: Input file '$input' does not exist." >&2
+		basic-process-usage
+		return 1
+	fi
+
+	if [[ -z $output ]]; then
+		echo "ERROR: Output file's name must be provided." >&2
+		basic-process-usage
+		return 1
+	elif [[ -e $output ]]; then
+		echo "ERROR: Output file '$output' already exists." >&2
+		du -h "$output"
+		basic-process-usage
+		return 1
+	fi
+
+	typeset -u normalize
+	if [[ $normalize == "Y" ]]; then
+		echo "Normalize set to TRUE."
+		normalize='-filter:a "dynaudnorm=f=33:g=65:p=0.66:m=33.3"'
+	else
+		echo "No audio normalization is being done."
+		normalize=""
+	fi
+
+	# Main
+	echo "`date` - Converting '$input' to '$output'."
+	set -x
+	ffmpeg -nostdin -hide_banner -loglevel quiet \
+		-i "$input" $extra $normalize "$output"
+	status=$?
+	set +x
+
+	if [[ $status != 0 ]]; then
+		echo "`date` - WARNING: ffmpeg exited with status '$status'." >&2
+	fi
+
+	# Finish
+	if [[ ! -n $output ]]; then
+		echo "`date` - ERROR: Output '$output' not created or has 0 size." >&2
+		return 1
+	fi
+
+	echo "`date` - '$output' has been created successfully."
+	du -h "$input"
+	du -h "$output"
+
+	echo "`date` - Finished basic-process"
+	return 0
+}
+alias v2a="basic-process"
+alias vta="v2a"
+alias va="v2a"
+alias pa="v2a"
+alias fix-audio="basic-process"
 
 # Go to normal storage. DISABLED, use shortcut aliases instead.
 #cd ~/storage/shared/
