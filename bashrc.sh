@@ -141,14 +141,14 @@ function process-video {
 	set +x
 	echo "`date` - Done with the final pass."
 	
-	if [[ $passes == 2 ]]; then
+	if [[ $passes == 2 && $status == 0 ]]; then
 		mv -v ffmpeg2pass*.log* ~/TRASH/
 	fi
 
 	sync
+	sleep 5
 	if [[ -s $newfile ]]; then
 		echo "`date` - Getting file sizes."
-		sleep 3
 		du -h "$file"
 		du -h "$newfile"
 	else
