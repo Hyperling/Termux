@@ -111,6 +111,9 @@ function process-video {
 	fi
 	size="-filter:v scale=-1:$size"
 	
+	if [[ -z $passes ]]; then
+		passes=1
+	fi
 	pass=""
 	if [[ $passes != 1 ]]; then
 		passes=2
@@ -126,10 +129,14 @@ function process-video {
 			-i "$file" $size $video $audio \
 			-filter:a "dynaudnorm=f=33:g=65:p=0.66:m=33.3" \
 			-vcodec libx264 -movflags +faststart \
-			-pass 1 -f mp4 /dev/null -y &&
-		set +x &&
-		echo "`date` - Done with the first pass." ||
-		return 1
+			-pass 1 -f mp4 /dev/null -y
+		status=$?
+		set +x
+		echo "`date` - Done with the first pass."
+		if [[ $status != 0 ]]; then
+			echo "Received unsuccessful status, exiting."
+			return 1
+		fi
 	fi
 	
 	set -x &&
