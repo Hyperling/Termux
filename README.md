@@ -22,8 +22,8 @@ Hyperling's scripts for a productive Termux environment.
     chmod 755 *.sh
     ```
 
-1. Make any modifications to the env.example file
-    - Only if you do not already have a ~/.env file
+1. Make any modifications to the env.example file.
+    - Only if you do not already have ~/.env already.
 
 1. Run the deployment script.
 
@@ -31,11 +31,13 @@ Hyperling's scripts for a productive Termux environment.
     ./setup.sh
     ```
 
-1. All done!
+1. All done. Be sure to source your new `.bashrc`!
 
 # Updates
 
 Each program is developed to be run numerous times, so all that needs done is following the Install instructions again.
+
+Shortcuts for this exist after the initial install, such as running `termux-reload` then `bash-reload`.
 
 # Development
 
@@ -47,3 +49,5 @@ cd ~/termux-copy
 chmod 755 *.sh
 ./setup.sh
 ```
+
+Or use the `test-termux` command if the project is already loaded.
