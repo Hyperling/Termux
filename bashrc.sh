@@ -111,6 +111,7 @@ function process-video {
 	fi
 	size="-filter:v scale=-1:$size"
 	
+	pass=""
 	if [[ $passes != 1 ]]; then
 		passes=2
 		pass="-pass 2"
