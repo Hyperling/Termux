@@ -154,7 +154,8 @@ function process-video {
 	fi
 
 	sync
-	sleep 5
+	sleep 10
+	sync
 	if [[ -s $newfile ]]; then
 		echo "`date` - Getting file sizes."
 		du -h "$file"
