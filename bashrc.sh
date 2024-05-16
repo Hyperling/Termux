@@ -111,6 +111,10 @@ function process-video {
 	fi
 	size="-filter:v scale=-1:$size"
 	
+	if [[ -z $passes ]]; then
+		passes=1
+	fi
+	pass=""
 	if [[ $passes != 1 ]]; then
 		passes=2
 		pass="-pass 2"
@@ -125,10 +129,14 @@ function process-video {
 			-i "$file" $size $video $audio \
 			-filter:a "dynaudnorm=f=33:g=65:p=0.66:m=33.3" \
 			-vcodec libx264 -movflags +faststart \
-			-pass 1 -f mp4 /dev/null -y &&
-		set +x &&
-		echo "`date` - Done with the first pass." ||
-		return 1
+			-pass 1 -f mp4 /dev/null -y
+		status=$?
+		set +x
+		echo "`date` - Done with the first pass."
+		if [[ $status != 0 ]]; then
+			echo "Received unsuccessful status, exiting."
+			return 1
+		fi
 	fi
 	
 	set -x &&
@@ -146,7 +154,8 @@ function process-video {
 	fi
 
 	sync
-	sleep 5
+	sleep 10
+	sync
 	if [[ -s $newfile ]]; then
 		echo "`date` - Getting file sizes."
 		du -h "$file"
@@ -257,11 +266,31 @@ function basic-process {
 	echo "`date` - Finished basic-process"
 	return 0
 }
-alias v2a="basic-process"
+alias bp="basic-process"
+alias bv="bp"
+
+# Function to automatically append tbe Y.
+function fix-audio {
+	basic-process "$1" Y
+}
+
+# Function to easily turn a video to audio without typing the audio name.
+function convert-to-audio {
+	video="$1"
+	audio="$2"
+	if [[ -z "$2" || "$2" == "Y" ]]; then
+		audio="${1//mp4/mp3}"
+	fi
+	volume=""
+	if [[ ( "$2" == "Y" && -z "$3" ) || "$3" == "Y" ]]; then
+		$volume="Y"
+	fi
+	basic-process "$video" "$audio" $volume
+}
+alias v2a="convert-to-audio"
 alias vta="v2a"
 alias va="v2a"
 alias pa="v2a"
-alias fix-audio="basic-process"
 
 # Go to normal storage. DISABLED, use shortcut aliases instead.
 #cd ~/storage/shared/
