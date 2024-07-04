@@ -57,9 +57,9 @@ alias install="pkg install"
 
 # Optimize the bitrate and audio levels for an edited video.
 function process-video-usage {
-	echo "USAGE: process-video oldFile newFile [videoBitrate] [audioBitrate] [sizeRating]"
+	echo "USAGE: process-video oldFile newFile [videoBitrate] [audioBitrate] [sizeRating] [numPasses] [forceBitrate]"
 	echo -n "Purpose: Call ffmpeg with preferred video posting settings. "
-	echo -n "Bitrates default to 2000k and 192k, size is 720. "
+	echo -n "Bitrates default to 2000k and 192k, size is 720, passes is 1, and force is N."
 	echo "These work well on Odysee and are fairly small as backups."
 	echo "Examples:"
 	echo "- Create a small file for quick streaming." 
@@ -75,6 +75,7 @@ function process-video {
 	audio="$4"
 	size="$5"
 	passes="$6"
+	force="$7"
 
 	# Validations
 	if [[ -z $file || ! -e $file ]]; then
@@ -118,6 +119,10 @@ function process-video {
 	if [[ $passes != 1 ]]; then
 		passes=2
 		pass="-pass 2"
+	fi
+	
+	if [[ $force == "Y" ]]; then
+		video="${video//maxrate/b:v}"
 	fi
 
 	## Main ##
