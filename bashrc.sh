@@ -100,7 +100,11 @@ function process-video {
 	if [[ -z $video ]]; then
 		video="2000k"
 	fi
-	video="-maxrate $video"
+	if [[ $force == "Y" ]]; then
+		video="-b:v $video"
+	else
+		video="-b:v $video -minrate 0 -maxrate $video -bufsize $video"
+	fi
 
 	if [[ -z $audio ]]; then
 		audio="192k"
@@ -119,10 +123,6 @@ function process-video {
 	if [[ $passes != 1 ]]; then
 		passes=2
 		pass="-pass 2"
-	fi
-	
-	if [[ $force == "Y" ]]; then
-		video="${video//maxrate/b:v}"
 	fi
 
 	## Main ##
