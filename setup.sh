@@ -29,7 +29,7 @@ fi
 
 echo -e "\n`date` - Install Software"
 pkg install -y \
-	openssh tsu vim htop git cronie man \
+	openssh tsu vim htop git cronie man zip \
 	nmap traceroute wget \
 	ffmpeg imagemagick \
 	kotlin php nodejs python libllvm
@@ -64,7 +64,7 @@ ln -s ~/storage/shared/TRASH ~/TRASH
 if [[ -n $DIR && $DIR != "/" && -d .git ]]; then
 	echo "We are in a git clone, remove the project."
 	cd ..
-	mv -v $DIR ~/TRASH/termux-"`date +'%Y%m%d%H%M%S'`" | 
+	mv -v $DIR ~/TRASH/termux-"`date +'%Y%m%d%H%M%S'`" |
 		grep -v '/.git/'
 else
 	echo "File was used individually, remove it."
